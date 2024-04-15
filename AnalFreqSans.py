@@ -10,7 +10,7 @@ def count_words_in_text(text, words):
     words_text = re.findall(r'[\u0900-\u097F]+', text.lower())
     return [words_text.count(word.lower()) for word in words]
 
-st.title('Multi-Entity Frequency Analyzer - Adi Parva')
+st.title('Multi-Entity Frequency Analyzer - Sanskrit Editions')
 
 words_to_search = st.text_input("Enter words to analyze (comma separated):")
 
@@ -42,4 +42,4 @@ if st.button('Analyze'):
         plt.title('Frequency of each word in each file')
         st.pyplot(plt)
     else:
-        st.write("Please input words (comma separated).")
+        st.write("Please input Devanagari words (comma separated).")
