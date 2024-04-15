@@ -21,7 +21,7 @@ file_paths = ['https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Comple
               'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MBTN.txt']
 
 # Define the file names
-file_names = ['BD', 'KMG', 'MND']
+file_names = ['BORI', 'KK', 'SV', 'MBTN']
 
 if st.button('Analyze'):
     if words_to_search:
