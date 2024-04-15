@@ -12,7 +12,7 @@ def count_words_in_text(text, words):
 
 st.title('Multi-Entity Frequency Analyzer - Sanskrit Editions')
 
-words_to_search = st.text_input("Enter words to analyze (comma separated):")
+words_to_search = st.text_input("Enter Devanagari words to analyze (comma separated):")
 
 # Define the file paths
 file_paths = ['https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
@@ -42,4 +42,4 @@ if st.button('Analyze'):
         plt.title('Frequency of each word in each file')
         st.pyplot(plt)
     else:
-        st.write("Please input Devanagari words (comma separated).")
+        st.write("Please input valid Devanagari words (comma separated).")
