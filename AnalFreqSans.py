@@ -5,12 +5,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import requests
+import codecs
 
 def count_words_in_text(text, words):
-    words_text = re.findall(r'\w+', text, flags=re.UNICODE) # Unicode flag for Devanagari
-    return [words_text.count(word) for word in words]
+    words_text = re.findall(r'\w+', text.lower())
+    return [words_text.count(word.lower()) for word in words]
 
-st.title('Multi-Entity Frequency Analyzer - Sanskrit Editions')
+st.title('Multi-Entity Frequency Analyzer - Adi Parva')
 
 words_to_search = st.text_input("Enter words to analyze (comma separated):")
 
@@ -30,6 +31,7 @@ if st.button('Analyze'):
         for file_path, file_name in zip(file_paths, file_names):
             response = requests.get(file_path)
             text = response.text
+            text = codecs.decode(text, 'unicode_escape')  # Decode Unicode escape sequences
             counts = count_words_in_text(text, words_to_search)
             for word, count in zip(words_to_search, counts):
                 data.append([file_name, word, count])
@@ -42,5 +44,4 @@ if st.button('Analyze'):
         plt.title('Frequency of each word in each file')
         st.pyplot(plt)
     else:
-        st.write("Please input Devanagari words (comma separated).")
-
+        st.write("Please input words (comma separated).")
