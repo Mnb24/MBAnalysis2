@@ -37,16 +37,15 @@ if st.button('Analyze'):
         # Create a DataFrame
         df = pd.DataFrame(data, columns=['File', 'Word', 'Frequency'])
 
-        # Create a line plot
-        sns.lineplot(data=df, x='Word', y='Frequency', hue='File', marker='o')
+        # Create a bar plot
+        sns.barplot(x='Word', y='Frequency', hue='File', data=df)
         plt.title('Frequency of each word in each file')
-        plt.xlabel('Words')
-        plt.ylabel('Frequency')
         
         # Manually set x-axis tick labels to Devanagari words
-        plt.xticks(range(len(words_to_search)), words_to_search, rotation=45, ha='right')
+        plt.xticks(range(len(words_to_search)), words_to_search, rotation=45, ha='right', fontsize=8)
         
-        plt.tight_layout()
+        plt.xlabel('Devanagari Words')
+        plt.ylabel('Frequency')
         st.pyplot(plt)
     else:
         st.write("Please input valid Devanagari words (comma separated).")
