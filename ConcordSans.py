@@ -52,6 +52,9 @@ def perform_concordance(texts, text_names, target_word):
                         # Print the next line if available
                         if j < len(lines) - 1:
                             st.write(lines[j + 1])
+                            
+                        # Add a marker to separate sets
+                        st.write("-----")
                 st.write("\n")
         st.write("********")  # Inserting special characters after each group of three instances
 
