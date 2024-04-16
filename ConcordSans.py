@@ -84,7 +84,7 @@ def main():
 
     if st.button('Perform Concordance Analysis'):
     # Get context paragraphs for the selected text
-    perform_concordance([text], [selected_edition], target_word)
+        perform_concordance([text], [selected_edition], target_word)
 
 
 if __name__ == "__main__":
