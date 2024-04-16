@@ -61,7 +61,7 @@ def perform_concordance(texts, text_names, target_word):
 
 def main():
     # Displaying heading
-    st.title("Concordance Analyzer - Adi Parva (Instance-wise)")
+    st.title("Concordance Analyzer - Sanskrit Editions (Sequential)")
 
     # URLs of the text files
     file_paths = [
@@ -77,7 +77,7 @@ def main():
         text = response.text
         texts.append(text)
 
-    target_word = st.text_input("Enter the word for concordance analysis: ")
+    target_word = st.text_input("Enter the Devanagari word for concordance analysis: ")
 
     if st.button('Perform Concordance Analysis'):
         perform_concordance(texts, text_names, target_word)
