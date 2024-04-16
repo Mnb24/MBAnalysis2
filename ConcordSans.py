@@ -48,7 +48,7 @@ def perform_concordance(texts, text_names, target_word):
                         if j > 0:
                             st.write(lines[j - 1])
                         # Highlight the line containing the target word
-                        st.write(line, unsafe_allow_html=True)
+                        st.markdown(line, unsafe_allow_html=True)
                         # Print the next line if available
                         if j < len(lines) - 1:
                             st.write(lines[j + 1])
