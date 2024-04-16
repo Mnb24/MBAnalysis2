@@ -1,67 +1,62 @@
 import streamlit as st
-from nltk.tokenize import sent_tokenize, word_tokenize
 import requests
-import nltk
+import re
 
-# Download nltk resources
-nltk.download('punkt')
+# Function to fetch text from URL
+def fetch_text(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return None
 
-def get_context_paragraphs(text, target_word, context_lines=2):
-    sentences = sent_tokenize(text)
-    paragraphs = []
-
-    # Find sentences containing the target word
-    for i, sentence in enumerate(sentences):
-        if target_word in word_tokenize(sentence):
-            start_index = max(0, i - context_lines)
-            end_index = min(len(sentences), i + context_lines + 1)
-            context_sentences = sentences[start_index:end_index]
-            context_paragraph = " ".join(context_sentences)
-            paragraphs.append(context_paragraph)
-
-    return paragraphs
-
-def perform_concordance(texts, text_names, target_word):
-    paragraphs_by_file = {text_name: [] for text_name in text_names}
-
-    # Get context paragraphs for each text
-    for text, text_name in zip(texts, text_names):
-        context_paragraphs = get_context_paragraphs(text, target_word)
-        paragraphs_by_file[text_name] = context_paragraphs
-
-    # Print concordance results in groups of three
-    num_paragraphs = max(len(paragraphs_by_file[text_name]) for text_name in text_names)
-    for i in range(0, num_paragraphs, 3):
-        for text_name in text_names:
-            if i < len(paragraphs_by_file[text_name]):
-                st.write(f"**{text_name}:**")
-                highlighted_paragraph = paragraphs_by_file[text_name][i].replace(target_word, f"<span style='color: red'>{target_word}</span>")
-                st.write(highlighted_paragraph, unsafe_allow_html=True)
-                st.write("\n")
-        st.write("********")  # Inserting special characters after each group of three instances
-
-def main():
-    # Displaying heading
-    st.title("Concordance Analyzer - Adi Parva (Instance-wise)")
-
-    # URLs of the text files
-    file_paths = [
-        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
-              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt', 
-              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt'
-    ]
-    text_names = ['BD1', 'KMG1', 'MND1']
+# Function to find matches in the BR and KK files and highlight the target word by changing font color
+def find_matches(target_phrases, br_text, kk_text):
+    br_lines = br_text.split('\n')
+    kk_lines = kk_text.split('\n')
+    matched_lines = []
     
-    texts = []
-    for file_path in file_paths:
-        response = requests.get(file_path)
-        text = response.text
-        texts.append(text)
+    # Insert newline before sentences starting with "BR", "KK", or "SV"
+    br_text_with_newlines = re.sub(r'(\. )((BR|KK|SV)[A-Za-z0-9_\-]*)(?= )', r'\1\n\2', br_text)
+    
+    for line in br_text_with_newlines.split('\n'):
+        for phrase in target_phrases:
+            if re.search(re.escape(phrase), line, flags=re.IGNORECASE):
+                line = re.sub(re.escape(phrase), r'<span style="color:red">\g<0></span>', line, flags=re.IGNORECASE)
+                matched_lines.append(line)
+    return matched_lines
 
-    target_word = st.text_input("Enter the word for concordance analysis: ")
+# Main function
+def main():
+    # Title and description
+    st.title("Parallel Phrase Finder")
+    st.write("Find matches for words/phrases entered in the second text box (referring the text in the sidebar) within the BORI and KK editions.")
 
-    if st.button('Perform Concordance Analysis'):
-        perform_concordance(texts, text_names, target_word)
+    # Fetching file contents
+    sv_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt")
+    br_complete_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt")
+    kk_complete_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt")
 
+    if sv_text is None or br_complete_text is None or kk_complete_text is None:
+        st.error("Failed to fetch file contents. Please try again later.")
+        return
+
+    # Sidebar with text boxes
+    st.sidebar.header("Text from Sastri Vavilla")
+    selected_text = st.sidebar.text_area("SV", sv_text, height=400)
+    
+    target_phrases = st.sidebar.text_area("Enter phrases to find matches", height=200).strip().split('\n')
+
+    # Button to find matches
+    if st.sidebar.button("Find Matches"):
+        matched_lines = find_matches(target_phrases, br_complete_text, kk_complete_text)
+        if matched_lines:
+            st.header("Matches Found in BORI and KK editions:")
+            for line in matched_lines:
+                st.markdown(line, unsafe_allow_html=True)
+        else:
+            st.header("No matches found.")
+
+# Run the main function
 if __name__ == "__main__":
     main()
