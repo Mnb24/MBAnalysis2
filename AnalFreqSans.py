@@ -40,6 +40,9 @@ if st.button('Analyze'):
         # Create a bar plot
         sns.barplot(x='Word', y='Frequency', hue='File', data=df)
         plt.title('Frequency of each word in each file')
+        plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better visibility
+        plt.xlabel('Devanagari Words')
+        plt.ylabel('Frequency')
         st.pyplot(plt)
     else:
         st.write("Please input valid Devanagari words (comma separated).")
