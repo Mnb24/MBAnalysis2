@@ -85,29 +85,7 @@ def main():
 
     if st.button('Perform Concordance Analysis'):
         # Get context paragraphs for the selected text
-        context_paragraphs = get_context_paragraphs(text, target_word)
-        
-        # Print concordance results in sets of three lines
-        for paragraph in context_paragraphs:
-            lines = paragraph.split('\n')
-            for i, line in enumerate(lines):
-                # Add a newline before BR, KK, SV, and MB
-                if line.startswith(('BR', 'KK', 'SV', 'MBTN')):
-                    st.write("")
-                # Highlight the line containing the target word
-                if target_word in line:
-                    st.markdown(line.replace(target_word, f"<span style='color: red'>{target_word}</span>"), unsafe_allow_html=True)
-                else:
-                    st.write(line)
-                    
-                # Print the next line if available
-                if i < len(lines) - 1:
-                    st.write(lines[i + 1])
-                    
-                # Add a marker to separate sets
-                st.write("-----")
-            st.write("********")
-
+        perform_concordance([text], [selected_edition], target_word)
 
 if __name__ == "__main__":
     main()
