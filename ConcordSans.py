@@ -46,9 +46,9 @@ def main():
 
     # URLs of the text files
     file_paths = [
-        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BD1.txt', 
-        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KMG1.txt', 
-        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MND1.txt'
+        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
+              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt', 
+              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt'
     ]
     text_names = ['BR', 'KK', 'SV']
     
