@@ -83,8 +83,9 @@ def main():
     target_word = st.text_input("Enter the Devanagari word for concordance analysis: ")
 
     if st.button('Perform Concordance Analysis'):
-        # Get context paragraphs for the selected text
-        perform_concordance([text], [selected_edition], target_word)
+    # Get context paragraphs for the selected text
+    perform_concordance([text], [selected_edition], target_word)
+
 
 if __name__ == "__main__":
     main()
