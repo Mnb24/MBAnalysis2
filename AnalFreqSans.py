@@ -1,6 +1,7 @@
 import streamlit as st
 from collections import Counter
 import re
+import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import requests
@@ -36,12 +37,15 @@ if st.button('Analyze'):
         # Create a DataFrame
         df = pd.DataFrame(data, columns=['File', 'Word', 'Frequency'])
 
-        # Create a point plot
-        sns.pointplot(data=df, x='Word', y='Frequency', hue='File', markers=['o', 's', 'D', '^'])
+        # Create a line plot
+        sns.lineplot(data=df, x='Word', y='Frequency', hue='File', marker='o')
         plt.title('Frequency of each word in each file')
-        plt.xlabel('Devanagari Words')
+        plt.xlabel('Words')
         plt.ylabel('Frequency')
-        plt.xticks(rotation=45, ha='right')
+        
+        # Manually set x-axis tick labels to Devanagari words
+        plt.xticks(range(len(words_to_search)), words_to_search, rotation=45, ha='right')
+        
         plt.tight_layout()
         st.pyplot(plt)
     else:
