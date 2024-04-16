@@ -70,7 +70,7 @@ def main():
               'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt',
             'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MBTN.txt'
     ]
-    text_names = ['BR', 'KK', 'SV']
+    text_names = ['BR', 'KK', 'SV', 'MBTN']
     
     texts = []
     for file_path in file_paths:
