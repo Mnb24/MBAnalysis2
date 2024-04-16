@@ -67,7 +67,8 @@ def main():
     file_paths = [
         'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
               'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt', 
-              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt'
+              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt',
+            'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MBTN.txt'
     ]
     text_names = ['BR', 'KK', 'SV']
     
