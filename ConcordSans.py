@@ -35,7 +35,13 @@ def perform_concordance(texts, text_names, target_word):
         for text_name in text_names:
             if i < len(paragraphs_by_file[text_name]):
                 st.write(f"**{text_name}:**")
-                highlighted_paragraph = paragraphs_by_file[text_name][i].replace(target_word, f"<span style='color: red'>{target_word}</span>")
+                highlighted_paragraph = paragraphs_by_file[text_name][i]
+                
+                # Check if the target word is within an HTML tag
+                if f">{target_word}<" in highlighted_paragraph:
+                    continue  # Skip this paragraph if the target word is within an HTML tag
+                
+                highlighted_paragraph = highlighted_paragraph.replace(target_word, f"<span style='color: red'>{target_word}</span>")
                 
                 # Split the paragraph by newline
                 lines = highlighted_paragraph.split('\n')
@@ -56,7 +62,8 @@ def perform_concordance(texts, text_names, target_word):
                         # Add a marker to separate sets
                         st.write("-----")
                 st.write("\n")
-        st.write("********")  
+        st.write("********")
+
 
 def main():
     # Displaying heading
