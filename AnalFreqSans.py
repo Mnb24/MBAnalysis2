@@ -5,14 +5,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import requests
-from matplotlib import rcParams
 
 def count_words_in_text(text, words):
     words_text = re.findall(r'[\u0900-\u097F]+', text.lower())
     return [words_text.count(word.lower()) for word in words]
-
-# Set font to support Devanagari characters
-rcParams['font.family'] = 'Nirmala UI'
 
 st.title('Multi-Entity Frequency Analyzer - Sanskrit Editions')
 
@@ -44,7 +40,11 @@ if st.button('Analyze'):
         # Create a bar plot
         sns.barplot(x='Word', y='Frequency', hue='File', data=df)
         plt.title('Frequency of each word in each file')
-        plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better visibility
+        
+        # Convert Devanagari words to Unicode strings for x-axis labels
+        unicode_words = [word.encode('utf-8').decode('unicode-escape') for word in words_to_search]
+        plt.xticks(range(len(unicode_words)), unicode_words, rotation=45, ha='right')
+        
         plt.xlabel('Devanagari Words')
         plt.ylabel('Frequency')
         st.pyplot(plt)
