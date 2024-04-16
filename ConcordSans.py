@@ -31,7 +31,7 @@ def perform_concordance(texts, text_names, target_word):
 
     # Print concordance results in groups of three
     num_paragraphs = max(len(paragraphs_by_file[text_name]) for text_name in text_names)
-    for i in range(0, num_paragraphs, 3):
+    for i in range(num_paragraphs):
         for text_name in text_names:
             if i < len(paragraphs_by_file[text_name]):
                 st.write(f"**{text_name}:**")
@@ -42,18 +42,17 @@ def perform_concordance(texts, text_names, target_word):
                 
                 # Iterate through lines
                 for j, line in enumerate(lines):
-                    # Check if the line contains the target word
-                    if target_word in line:
-                        # Print the previous line if available
-                        if j > 0:
-                            st.write(lines[j - 1])
-                        # Highlight the line containing the target word
-                        st.markdown(line, unsafe_allow_html=True)
-                        # Print the next line if available
-                        if j < len(lines) - 1:
-                            st.write(lines[j + 1])
-                            
-                        # Add a marker to separate sets
+                    # Print the previous line if available
+                    if j > 0:
+                        st.write(lines[j - 1])
+                    # Highlight the line containing the target word
+                    st.markdown(line, unsafe_allow_html=True)
+                    # Print the next line if available
+                    if j < len(lines) - 1:
+                        st.write(lines[j + 1])
+                    
+                    # Add a marker to separate sets
+                    if j < len(lines) - 1:
                         st.write("-----")
                 st.write("\n")
         st.write("********")  # Inserting special characters after each group of three instances
