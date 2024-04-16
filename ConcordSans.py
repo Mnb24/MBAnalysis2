@@ -19,17 +19,6 @@ def get_context_paragraphs(text, target_word, context_lines=2):
             context_paragraph = " ".join(context_sentences)
             paragraphs.append(context_paragraph)
 
-    # Insert newline before lines starting with "BR", "SC", or "KK"
-    for i, paragraph in enumerate(paragraphs):
-        lines = paragraph.split("\n")
-        new_paragraph = ""
-        for line in lines:
-            if line.startswith("BR") or line.startswith("SC") or line.startswith("KK"):
-                new_paragraph += "\n" + line
-            else:
-                new_paragraph += line
-        paragraphs[i] = new_paragraph
-
     return paragraphs
 
 def perform_concordance(texts, text_names, target_word):
@@ -57,9 +46,9 @@ def main():
 
     # URLs of the text files
     file_paths = [
-        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
-              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt', 
-              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt'
+        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BD1.txt', 
+        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KMG1.txt', 
+        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MND1.txt'
     ]
     text_names = ['BR', 'KK', 'SV']
     
