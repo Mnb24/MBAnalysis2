@@ -64,24 +64,51 @@ def main():
     st.title("Concordance Analyzer - Sanskrit Editions (Sequential)")
 
     # URLs of the text files
-    file_paths = [
-        'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
-              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt', 
-              'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt',
-            'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MBTN.txt'
-    ]
-    text_names = ['BR', 'KK', 'SV', 'MBTN']
+    file_paths = {
+        'BR': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
+        'KK': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt', 
+        'SV': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt',
+        'MBTN': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MBTN.txt'
+    }
     
-    texts = []
-    for file_path in file_paths:
-        response = requests.get(file_path)
-        text = response.text
-        texts.append(text)
+    # Dropdown to select the edition
+    selected_edition = st.selectbox("Select Edition", list(file_paths.keys()))
+
+    # Function to fetch text data from URL
+    def fetch_text(url):
+        response = requests.get(url)
+        return response.text
+    
+    # Fetching text for the selected edition
+    text = fetch_text(file_paths[selected_edition])
 
     target_word = st.text_input("Enter the Devanagari word for concordance analysis: ")
 
     if st.button('Perform Concordance Analysis'):
-        perform_concordance(texts, text_names, target_word)
+        # Get context paragraphs for the selected text
+        context_paragraphs = get_context_paragraphs(text, target_word)
+        
+        # Print concordance results in sets of three lines
+        for paragraph in context_paragraphs:
+            lines = paragraph.split('\n')
+            for i, line in enumerate(lines):
+                # Add a newline before BR, KK, SV, and MB
+                if line.startswith(('BR', 'KK', 'SV', 'MBTN')):
+                    st.write("")
+                # Highlight the line containing the target word
+                if target_word in line:
+                    st.markdown(line.replace(target_word, f"<span style='color: red'>{target_word}</span>"), unsafe_allow_html=True)
+                else:
+                    st.write(line)
+                    
+                # Print the next line if available
+                if i < len(lines) - 1:
+                    st.write(lines[i + 1])
+                    
+                # Add a marker to separate sets
+                st.write("-----")
+            st.write("********")
+
 
 if __name__ == "__main__":
     main()
