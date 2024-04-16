@@ -5,10 +5,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import requests
+from matplotlib import rcParams
 
 def count_words_in_text(text, words):
     words_text = re.findall(r'[\u0900-\u097F]+', text.lower())
     return [words_text.count(word.lower()) for word in words]
+
+# Set font to support Devanagari characters
+rcParams['font.family'] = 'Nirmala UI'
 
 st.title('Multi-Entity Frequency Analyzer - Sanskrit Editions')
 
