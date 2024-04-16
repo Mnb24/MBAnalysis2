@@ -36,9 +36,15 @@ def perform_concordance(texts, text_names, target_word):
             if i < len(paragraphs_by_file[text_name]):
                 st.write(f"**{text_name}:**")
                 highlighted_paragraph = paragraphs_by_file[text_name][i].replace(target_word, f"<span style='color: red'>{target_word}</span>")
-                st.write(highlighted_paragraph, unsafe_allow_html=True)
+                # Split the paragraph by newline and add newline before lines starting with "BR", "KK", or "SV"
+                for line in highlighted_paragraph.split('\n'):
+                    if line.startswith(('BR', 'KK', 'SV')):
+                        st.write("\n" + line)
+                    else:
+                        st.write(line)
                 st.write("\n")
         st.write("********")  # Inserting special characters after each group of three instances
+
 
 def main():
     # Displaying heading
