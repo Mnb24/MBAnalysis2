@@ -32,25 +32,28 @@ def perform_concordance(texts, text_names, target_word):
     # Initialize counters for each edition
     counters = {text_name: 0 for text_name in text_names}
 
-    # Iterate through paragraphs and display in groups of three
+    # Calculate the total number of paragraphs
     max_paragraphs = max(len(paragraphs_by_file[text_name]) for text_name in text_names)
-    for i in range(max_paragraphs):
+    total_instances = len(text_names) * max_paragraphs
+
+    # Iterate through paragraphs and display in groups of three
+    instances_displayed = 0
+    while instances_displayed < total_instances:
         for text_name in text_names:
-            counter = counters[text_name]
-            paragraphs = paragraphs_by_file[text_name]
-            if counter < len(paragraphs):
+            if counters[text_name] < len(paragraphs_by_file[text_name]):
+                paragraphs = paragraphs_by_file[text_name]
                 st.write(f"**{text_name}:**")
-                highlighted_paragraph = paragraphs[counter]
-                
+                highlighted_paragraph = paragraphs[counters[text_name]]
+
                 # Check if the target word is within an HTML tag
                 if f">{target_word}<" in highlighted_paragraph:
                     continue  # Skip this paragraph if the target word is within an HTML tag
-                
+
                 highlighted_paragraph = highlighted_paragraph.replace(target_word, f"<span style='color: red'>{target_word}</span>")
-                
+
                 # Split the paragraph by newline
                 lines = highlighted_paragraph.split('\n')
-                
+
                 # Iterate through lines
                 for j, line in enumerate(lines):
                     # Check if the line contains the target word
@@ -63,14 +66,19 @@ def perform_concordance(texts, text_names, target_word):
                         # Print the next line if available
                         if j < len(lines) - 1:
                             st.write(lines[j + 1])
-                            
+
                         # Add a marker to separate sets
                         st.write("-----")
                 st.write("\n")
-                
+
                 # Increment the counter for the current edition
                 counters[text_name] += 1
-                
+                instances_displayed += 1
+
+            # Break the loop if all instances are displayed
+            if instances_displayed >= total_instances:
+                break
+
         # After displaying one instance from each edition, add a separator
         st.write("********")
 
