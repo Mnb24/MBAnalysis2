@@ -67,7 +67,7 @@ def perform_concordance(texts, text_names, target_word):
 
 def main():
     # Displaying heading
-    st.title("Concordance Analyzer - Sanskrit Editions (Sequential1)")
+    st.title("Concordance Analyzer - Sanskrit Editions (Sequential)")
 
     # URLs of the text files
     file_paths = {
