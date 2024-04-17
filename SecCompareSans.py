@@ -22,7 +22,7 @@ def get_common_words(parva_number):
     return common_words
 
 def main():
-    st.title("Section Comparison - Sanskrit Editions")
+    st.title("Parva Comparison - Sanskrit Editions")
 
     # Parva selection
     parva_number = st.select_slider("Select Parva Number", options=list(range(1, 19)), value=1)
