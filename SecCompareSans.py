@@ -10,7 +10,7 @@ file_urls = {
 
 def get_common_words(parva_number):
     common_words_with_line_numbers = {}
-    for key, url in file_urls.items():
+    for edition, url in file_urls.items():
         response = requests.get(url)
         if response.status_code == 200:
             text = response.text.split(f"Parva {parva_number}")[1]  # Assuming section 1
@@ -19,9 +19,9 @@ def get_common_words(parva_number):
                 words = line.split()
                 for word in words:
                     if word in common_words_with_line_numbers:
-                        common_words_with_line_numbers[word].append((key, line_number))
+                        common_words_with_line_numbers[word].append((edition, line_number))
                     else:
-                        common_words_with_line_numbers[word] = [(key, line_number)]
+                        common_words_with_line_numbers[word] = [(edition, line_number)]
     common_words = set(common_words_with_line_numbers.keys())
     return common_words, common_words_with_line_numbers
 
