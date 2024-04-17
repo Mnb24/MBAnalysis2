@@ -36,7 +36,8 @@ def main():
         common_words, common_words_with_line_numbers = get_common_words(parva_number)
         st.write("Common Words:")
         for word in common_words:
-            st.write(f"- {word}: {'\n'.join(f'{edition}-{line}' for edition, line in common_words_with_line_numbers[word])}\n")
+            line_info = '\n'.join([f'{edition}-{line}' for edition, line in common_words_with_line_numbers[word]])
+            st.write(f"- {word}:\n{line_info}\n")
 
 if __name__ == "__main__":
     main()
