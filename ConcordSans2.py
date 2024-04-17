@@ -33,8 +33,8 @@ def perform_concordance(texts, text_names, target_word):
     counters = {text_name: 0 for text_name in text_names}
 
     # Iterate through paragraphs and display in groups of three
-    num_paragraphs = max(len(paragraphs_by_file[text_name]) for text_name in text_names)
-    for i in range(num_paragraphs):
+    max_paragraphs = max(len(paragraphs_by_file[text_name]) for text_name in text_names)
+    for i in range(max_paragraphs):
         for text_name in text_names:
             counter = counters[text_name]
             paragraphs = paragraphs_by_file[text_name]
@@ -82,26 +82,22 @@ def main():
     file_paths = {
         'BR': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt', 
         'KK': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt', 
-        'SV': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt',
-        'MBTN': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/MBTN.txt'
+        'SV': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt'
     }
     
-    # Dropdown to select the edition
-    selected_edition = st.selectbox("Select Edition", list(file_paths.keys()))
-
-    # Function to fetch text data from URL
-    def fetch_text(url):
-        response = requests.get(url)
-        return response.text
-    
-    # Fetching text for the selected edition
-    text = fetch_text(file_paths[selected_edition])
+    texts = []
+    text_names = []
+    for text_name, file_path in file_paths.items():
+        response = requests.get(file_path)
+        if response.status_code == 200:
+            texts.append(response.text)
+            text_names.append(text_name)
 
     target_word = st.text_input("Enter the Devanagari word for concordance analysis: ")
 
     if st.button('Perform Concordance Analysis'):
-    # Get context paragraphs for the selected text
-        perform_concordance([text], [selected_edition], target_word)
+        # Get context paragraphs for the selected text
+        perform_concordance(texts, text_names, target_word)
 
 
 if __name__ == "__main__":
