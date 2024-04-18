@@ -22,7 +22,7 @@ def get_common_words(parva_number):
     common_words = set.intersection(*words_by_edition.values())
     return common_words, words_by_edition
 
-def get_word_occurrences(word, words_by_edition):
+def get_word_occurrences(word, words_by_edition, parva_number):
     occurrences = {}
     for edition, words in words_by_edition.items():
         text = requests.get(file_urls[edition]).text.split(f"Parva {parva_number}")[1]
@@ -36,7 +36,7 @@ def get_word_occurrences(word, words_by_edition):
     return occurrences
 
 def main():
-    st.title("Parva Comparison - Sanskrit Editions")
+    st.title("Parva Comparison - Sanskrit Editions (3)")
 
     # Parva selection
     parva_number = st.select_slider("Select Parva Number", options=list(range(1, 19)), value=1)
@@ -51,7 +51,7 @@ def main():
         st.write(f"Percentage of Similarity: {similarity_percentage:.2f}%")
         st.write("Common Words:")
         for word in common_words:
-            occurrences = get_word_occurrences(word, words_by_edition)
+            occurrences = get_word_occurrences(word, words_by_edition, parva_number)
             st.write(f"- {word}:")
             for edition, line_number in occurrences[word].items():
                 st.write(f"  {edition}: Line {line_number}")
