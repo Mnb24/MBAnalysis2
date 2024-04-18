@@ -1,63 +1,60 @@
 import streamlit as st
 import requests
-import re
 
-# Function to fetch text from URL
-def fetch_text(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.text
-    else:
-        return None
+# Dictionary containing file URLs
+file_urls = {
+    'BR': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt',
+    'KK': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt',
+    'SV': 'https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt'
+}
 
-# Function to find matches in the BR and KK files and highlight the target word by changing font color
-def find_matches(target_phrases, br_text, kk_text):
-    br_lines = br_text.split('\n')
-    kk_lines = kk_text.split('\n')
-    matched_lines = []
-    for line in br_lines:
-        for phrase in target_phrases:
-            if re.search(re.escape(phrase), line, flags=re.IGNORECASE):
-                line = re.sub(re.escape(phrase), r'<span style="color:red">\g<0></span>', line, flags=re.IGNORECASE)
-                matched_lines.append(line)
-    for line in kk_lines:
-        for phrase in target_phrases:
-            if re.search(re.escape(phrase), line, flags=re.IGNORECASE):
-                line = re.sub(re.escape(phrase), r'<span style="color:red">\g<0></span>', line, flags=re.IGNORECASE)
-                matched_lines.append(line)
-    return matched_lines
+def get_words(text):
+    return set(text.split())
 
-# Main function
-def main():
-    # Title and description
-    st.title("Parallel Phrase Finder")
-    st.write("Find matches for words/phrases entered in the second text box (referring the text in the sidebar) within the BORI and KK editions.")
-
-    # Fetching file contents
-    sv_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt")
-    br_complete_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt")
-    kk_complete_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt")
-
-    if sv_text is None or br_complete_text is None or kk_complete_text is None:
-        st.error("Failed to fetch file contents. Please try again later.")
-        return
-
-    # Sidebar with text boxes
-    st.sidebar.header("Text from Sastri Vavilla")
-    selected_text = st.sidebar.text_area("SV", sv_text, height=400)
+def get_common_words(parva_number):
+    words_by_edition = {}
+    for edition, url in file_urls.items():
+        response = requests.get(url)
+        if response.status_code == 200:
+            text = response.text.split(f"Parva {parva_number}")[1]  # Assuming section 1
+            words_by_edition[edition] = get_words(text)
     
-    target_phrases = st.sidebar.text_area("Enter phrases to find matches", height=200).strip().split('\n')
+    common_words = set.intersection(*words_by_edition.values())
+    return common_words, words_by_edition
 
-    # Button to find matches
-    if st.sidebar.button("Find Matches"):
-        matched_lines = find_matches(target_phrases, br_complete_text, kk_complete_text)
-        if matched_lines:
-            st.header("Matches Found in BORI and KK editions:")
-            for line in matched_lines:
-                st.markdown(line, unsafe_allow_html=True)
-        else:
-            st.header("No matches found.")
+def get_word_occurrences(word, words_by_edition, parva_number):
+    occurrences = {}
+    for edition, words in words_by_edition.items():
+        text = requests.get(file_urls[edition]).text.split(f"Parva {parva_number}")[1]
+        lines = text.split('\n')
+        for line_number, line in enumerate(lines, start=1):
+            if word in line.split():
+                if word in occurrences:
+                    occurrences[word][edition] = line_number
+                else:
+                    occurrences[word] = {edition: line_number}
+    return occurrences
 
-# Run the main function
+def main():
+    st.title("Parva Comparison - Sanskrit Editions")
+
+    # Parva selection
+    parva_number = st.select_slider("Select Parva Number", options=list(range(1, 19)), value=1)
+
+    # Button to compare
+    if st.button("Compare Parva"):
+        common_words, words_by_edition = get_common_words(parva_number)
+        total_words = sum(len(words) for words in words_by_edition.values())
+        common_word_count = len(common_words)
+        similarity_percentage = (common_word_count / total_words) * 100 if total_words > 0 else 0
+
+        st.write(f"Percentage of Similarity: {similarity_percentage:.2f}%")
+        st.write("Common Words:")
+        for word in common_words:
+            occurrences = get_word_occurrences(word, words_by_edition, parva_number)
+            st.write(f"- {word}:")
+            for edition, line_number in occurrences[word].items():
+                st.write(f"  {edition}: Line {line_number}")
+
 if __name__ == "__main__":
     main()
