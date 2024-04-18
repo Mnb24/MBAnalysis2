@@ -36,7 +36,7 @@ def get_word_occurrences(word, words_by_edition, parva_number):
     return occurrences
 
 def main():
-    st.title("Parva Comparison - Sanskrit Editions")
+    st.title("Parva Comparison - Sanskrit Editions (3)")
 
     # Parva selection
     parva_number = st.select_slider("Select Parva Number", options=list(range(1, 19)), value=1)
