@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import re
+from bs4 import BeautifulSoup
 
 # Function to fetch text from URL
 def fetch_text(url):
@@ -17,11 +18,12 @@ def find_matches(bori_text, input_text):
 
     # Find matches in BORI edition
     matches = []
-    for sentence in re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', bori_text):
+    sentences = bori_text.split('.')
+    for sentence in sentences:
         for word in input_words:
             if re.search(r'\b' + re.escape(word) + r'\b', sentence, re.IGNORECASE):
-                matches.append(sentence)
-                break  # If any word is found in the sentence, move to the next sentence
+                sentence = sentence.replace(word, f"<span style='color:red'>{word}</span>")
+                matches.append(sentence.strip())
     return matches
 
 def main():
@@ -46,7 +48,7 @@ def main():
             if matches:
                 st.write("Matches found in BORI edition:")
                 for match in matches:
-                    st.write(match)
+                    st.markdown(match, unsafe_allow_html=True)
             else:
                 st.write("No matches found in BORI edition.")
 
