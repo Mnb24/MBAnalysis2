@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import re
-from bs4 import BeautifulSoup
 
 # Function to fetch text from URL
 def fetch_text(url):
@@ -11,20 +10,21 @@ def fetch_text(url):
     else:
         return None
 
-# Function to find matches in BORI edition
+# Function to find matches in BORI edition and return sentences with matched words highlighted
 def find_matches(bori_text, input_text):
     # Split input text into words
     input_words = re.findall(r'\b\w+\b', input_text)
 
     # Find matches in BORI edition
-    matches = []
-    sentences = bori_text.split('.')
+    sentences = re.split(r'(?<=[.!?])\s+', bori_text)
+    matched_sentences = []
     for sentence in sentences:
         for word in input_words:
             if re.search(r'\b' + re.escape(word) + r'\b', sentence, re.IGNORECASE):
-                sentence = sentence.replace(word, f"<span style='color:red'>{word}</span>")
-                matches.append(sentence.strip())
-    return matches
+                sentence = re.sub(r'\b' + re.escape(word) + r'\b', f'<span style="color:red">{word}</span>', sentence, flags=re.IGNORECASE)
+                matched_sentences.append(sentence)
+                break  # Once a match is found in the sentence, move to the next sentence
+    return matched_sentences
 
 def main():
     # Fetch text from URLs
@@ -44,11 +44,11 @@ def main():
     st.title("Matches in BORI Edition")
     if find_matches_button:
         if br_text and input_text:
-            matches = find_matches(br_text, input_text)
-            if matches:
+            matched_sentences = find_matches(br_text, input_text)
+            if matched_sentences:
                 st.write("Matches found in BORI edition:")
-                for match in matches:
-                    st.markdown(match, unsafe_allow_html=True)
+                for sentence in matched_sentences:
+                    st.markdown(sentence, unsafe_allow_html=True)
             else:
                 st.write("No matches found in BORI edition.")
 
