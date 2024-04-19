@@ -17,9 +17,11 @@ def find_matches(bori_text, input_text):
 
     # Find matches in BORI edition
     matches = []
-    for word in input_words:
-        if re.search(r'\b' + re.escape(word) + r'\b', bori_text, re.IGNORECASE):
-            matches.append(word)
+    for sentence in re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', bori_text):
+        for word in input_words:
+            if re.search(r'\b' + re.escape(word) + r'\b', sentence, re.IGNORECASE):
+                matches.append(sentence)
+                break  # If any word is found in the sentence, move to the next sentence
     return matches
 
 def main():
@@ -43,7 +45,8 @@ def main():
             matches = find_matches(br_text, input_text)
             if matches:
                 st.write("Matches found in BORI edition:")
-                st.write(matches)
+                for match in matches:
+                    st.write(match)
             else:
                 st.write("No matches found in BORI edition.")
 
