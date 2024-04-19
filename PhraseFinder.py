@@ -11,9 +11,9 @@ def fetch_text(url):
         return None
 
 # Function to find matches in BORI edition and return sentences with matched phrases highlighted
-def find_matches(bori_text, input_text):
-    # Find matches in BORI edition
-    lines = bori_text.split('BR')
+def find_matches(text, input_text):
+    # Find matches in the text
+    lines = text.split('BR')
     matched_lines = []
     for line in lines:
         if re.search(r'\b' + re.escape(input_text) + r'\b', line):
@@ -26,6 +26,7 @@ def main():
     # Fetch text from URLs
     sv_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/SV-Complete.txt")
     br_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt")
+    kk_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt")
 
     # Display side pane with text boxes
     st.sidebar.subheader("SV Text")
@@ -37,7 +38,7 @@ def main():
     find_matches_button = st.sidebar.button("Find Matches")
 
     # Display matches in main portion
-    st.title("Matches in BORI Edition")
+    st.title("Matches in BORI and KK Editions")
     if find_matches_button:
         if br_text and input_text:
             matched_lines = find_matches(br_text, input_text)
@@ -47,6 +48,15 @@ def main():
                     st.markdown(line, unsafe_allow_html=True)
             else:
                 st.write("No matches found in BORI edition.")
+        
+        if kk_text and input_text:
+            matched_lines = find_matches(kk_text, input_text)
+            if matched_lines:
+                st.write("Matches found in KK edition:")
+                for line in matched_lines:
+                    st.markdown(line, unsafe_allow_html=True)
+            else:
+                st.write("No matches found in KK edition.")
 
 if __name__ == "__main__":
     main()
