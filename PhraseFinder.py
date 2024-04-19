@@ -28,6 +28,9 @@ def main():
     kk_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/KK-Complete.txt")
 
     # Display side pane with text boxes
+    st.sidebar.subheader("SV Text")
+    sv_text_input = st.sidebar.text_area("SV Text", sv_text, height=400)
+
     st.sidebar.subheader("Input Text")
     input_text = st.sidebar.text_area("Input Text", height=200)
 
