@@ -19,6 +19,7 @@ def find_matches(text, input_text, delimiter):
         if re.search(r'\b' + re.escape(input_text) + r'\b', line):
             line = re.sub(r'\b' + re.escape(input_text) + r'\b', f'<span style="color:red">{input_text}</span>', line)
             matched_lines.append(delimiter + line)
+            break  # Stop after finding the first match
     return matched_lines
 
 def main():
