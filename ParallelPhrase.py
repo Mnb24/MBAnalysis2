@@ -34,16 +34,15 @@ def main():
 
         st.subheader("Input Text")
         input_text = st.text_area("Input Text", height=200)
-
-    # Display matches in main portion
-    st.title("Matches in BORI Edition")
-    if br_text and input_text:
-        matches = find_matches(br_text, input_text)
-        if matches:
-            st.write("Matches found:")
-            st.write(matches)
-        else:
-            st.write("No matches found.")
+        
+        if st.button("Find Matches"):
+            if br_text and input_text:
+                matches = find_matches(br_text, input_text)
+                if matches:
+                    st.write("Matches found:")
+                    st.write(matches)
+                else:
+                    st.write("No matches found.")
 
 if __name__ == "__main__":
     main()
