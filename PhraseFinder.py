@@ -44,6 +44,7 @@ def main():
                 st.write("Matches found in BORI edition:")
                 for sentence in matched_sentences:
                     st.markdown(sentence, unsafe_allow_html=True)
+                    break  # Stop after printing the first match
             else:
                 st.write("No matches found in BORI edition.")
 
