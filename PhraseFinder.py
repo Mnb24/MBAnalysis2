@@ -16,8 +16,8 @@ def find_matches(bori_text, input_text):
     sentences = re.split(r'(?<=[.!?])\s+', bori_text)
     matched_sentences = []
     for sentence in sentences:
-        if re.search(r'\b' + re.escape(input_text) + r'\b', sentence, re.IGNORECASE):
-            sentence = re.sub(r'\b' + re.escape(input_text) + r'\b', f'<span style="color:red">{input_text}</span>', sentence, flags=re.IGNORECASE)
+        if re.search(r'\b' + re.escape(input_text) + r'\b', sentence):
+            sentence = re.sub(r'\b' + re.escape(input_text) + r'\b', f'<span style="color:red">{input_text}</span>', sentence)
             matched_sentences.append(sentence)
     return matched_sentences
 
@@ -44,7 +44,7 @@ def main():
                 st.write("Matches found in BORI edition:")
                 for sentence in matched_sentences:
                     st.markdown(sentence, unsafe_allow_html=True)
-                    break  # Stop after printing the first match
+                    st.write("\n")  # Add a newline character after each line
             else:
                 st.write("No matches found in BORI edition.")
 
