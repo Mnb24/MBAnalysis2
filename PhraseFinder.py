@@ -10,15 +10,15 @@ def fetch_text(url):
     else:
         return None
 
-# Function to find matches in BORI edition and return sentences with matched phrases highlighted
-def find_matches(text, input_text):
+# Function to find matches in the text and return lines with matched phrases highlighted
+def find_matches(text, input_text, delimiter):
     # Find matches in the text
-    lines = text.split('BR')
+    lines = text.split(delimiter)
     matched_lines = []
     for line in lines:
         if re.search(r'\b' + re.escape(input_text) + r'\b', line):
             line = re.sub(r'\b' + re.escape(input_text) + r'\b', f'<span style="color:red">{input_text}</span>', line)
-            matched_lines.append(line)
+            matched_lines.append(delimiter + line)
             break  # Stop after finding the first match
     return matched_lines
 
@@ -41,7 +41,7 @@ def main():
     st.title("Matches in BORI and KK Editions")
     if find_matches_button:
         if br_text and input_text:
-            matched_lines = find_matches(br_text, input_text)
+            matched_lines = find_matches(br_text, input_text, ' BR')
             if matched_lines:
                 st.write("Matches found in BORI edition:")
                 for line in matched_lines:
@@ -50,7 +50,7 @@ def main():
                 st.write("No matches found in BORI edition.")
         
         if kk_text and input_text:
-            matched_lines = find_matches(kk_text, input_text)
+            matched_lines = find_matches(kk_text, input_text, ' KK')
             if matched_lines:
                 st.write("Matches found in KK edition:")
                 for line in matched_lines:
