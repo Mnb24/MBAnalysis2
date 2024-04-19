@@ -28,21 +28,20 @@ def main():
     br_text = fetch_text("https://raw.githubusercontent.com/Mnb24/MBAnalysis/main/BR-Complete.txt")
 
     # Display side pane with text boxes
-    with st.sidebar:
-        st.subheader("SV Text")
-        st.text_area("SV Text", sv_text, height=400)
+    st.sidebar.subheader("SV Text")
+    sv_text_input = st.sidebar.text_area("SV Text", sv_text, height=400)
 
-        st.subheader("Input Text")
-        input_text = st.text_area("Input Text", height=200)
-        
-        if st.button("Find Matches"):
-            if br_text and input_text:
-                matches = find_matches(br_text, input_text)
-                if matches:
-                    st.write("Matches found in BORI edition:")
-                    st.write(matches)
-                else:
-                    st.write("No matches found in BORI edition.")
+    st.sidebar.subheader("Input Text")
+    input_text = st.sidebar.text_area("Input Text", height=200)
+
+    if st.sidebar.button("Find Matches"):
+        if br_text and input_text:
+            matches = find_matches(br_text, input_text)
+            if matches:
+                st.write("Matches found in BORI edition:")
+                st.write(matches)
+            else:
+                st.write("No matches found in BORI edition.")
 
     # Display matches in main portion
     st.title("Matches in BORI Edition")
