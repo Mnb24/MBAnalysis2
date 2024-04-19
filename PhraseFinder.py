@@ -13,14 +13,14 @@ def fetch_text(url):
 # Function to find matches in BORI edition and return sentences with matched phrases highlighted
 def find_matches(bori_text, input_text):
     # Find matches in BORI edition
-    sentences = re.split(r'(?<=[.!?])\s+', bori_text)
-    matched_sentences = []
-    for sentence in sentences:
-        if re.search(r'\b' + re.escape(input_text) + r'\b', sentence):
-            sentence = re.sub(r'\b' + re.escape(input_text) + r'\b', f'<span style="color:red">{input_text}</span>', sentence)
-            matched_sentences.append(sentence)
+    lines = bori_text.split('BR')
+    matched_lines = []
+    for line in lines:
+        if re.search(r'\b' + re.escape(input_text) + r'\b', line):
+            line = re.sub(r'\b' + re.escape(input_text) + r'\b', f'<span style="color:red">{input_text}</span>', line)
+            matched_lines.append(line)
             break  # Stop after finding the first match
-    return matched_sentences
+    return matched_lines
 
 def main():
     # Fetch text from URLs
@@ -40,11 +40,11 @@ def main():
     st.title("Matches in BORI Edition")
     if find_matches_button:
         if br_text and input_text:
-            matched_sentences = find_matches(br_text, input_text)
-            if matched_sentences:
+            matched_lines = find_matches(br_text, input_text)
+            if matched_lines:
                 st.write("Matches found in BORI edition:")
-                for sentence in matched_sentences:
-                    st.markdown(sentence, unsafe_allow_html=True)
+                for line in matched_lines:
+                    st.markdown(line, unsafe_allow_html=True)
             else:
                 st.write("No matches found in BORI edition.")
 
