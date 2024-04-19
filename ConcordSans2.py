@@ -29,19 +29,18 @@ def perform_concordance(texts, text_names, target_word):
         context_paragraphs = get_context_paragraphs(text, target_word)
         paragraphs_by_file[text_name] = context_paragraphs
 
-    # Initialize counters for each edition
-    counters = {text_name: 0 for text_name in text_names}
-
     # Calculate the total number of paragraphs
     max_paragraphs = max(len(paragraphs_by_file[text_name]) for text_name in text_names)
     total_instances = len(text_names) * max_paragraphs
 
-    # Iterate through paragraphs and display in groups of three
-    instances_displayed = 0
-    while instances_displayed < total_instances:
+    # Initialize counters for each edition
+    counters = {text_name: 0 for text_name in text_names}
+
+    # Iterate through paragraphs and display in sets of three
+    for i in range(max_paragraphs):
         for text_name in text_names:
-            if counters[text_name] < len(paragraphs_by_file[text_name]):
-                paragraphs = paragraphs_by_file[text_name]
+            paragraphs = paragraphs_by_file[text_name]
+            if counters[text_name] < len(paragraphs):
                 st.write(f"**{text_name}:**")
                 highlighted_paragraph = paragraphs[counters[text_name]]
 
@@ -73,10 +72,9 @@ def perform_concordance(texts, text_names, target_word):
 
                 # Increment the counter for the current edition
                 counters[text_name] += 1
-                instances_displayed += 1
 
             # Break the loop if all instances are displayed
-            if instances_displayed >= total_instances:
+            if sum(counters.values()) >= total_instances:
                 break
 
         # After displaying one instance from each edition, add a separator
