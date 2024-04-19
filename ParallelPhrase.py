@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import re
 
 # Function to fetch text from URL
 def fetch_text(url):
@@ -10,10 +11,16 @@ def fetch_text(url):
         return None
 
 # Function to find matches in BORI edition
-def find_matches(sanskrit_text, input_text):
-    # Implement your matching algorithm here
-    # For demonstration purposes, let's just return the input text
-    return input_text
+def find_matches(bori_text, input_text):
+    # Split input text into words
+    input_words = re.findall(r'\b\w+\b', input_text)
+
+    # Find matches in BORI edition
+    matches = []
+    for word in input_words:
+        if re.search(r'\b' + re.escape(word) + r'\b', bori_text, re.IGNORECASE):
+            matches.append(word)
+    return matches
 
 def main():
     # Fetch text from URLs
@@ -22,16 +29,21 @@ def main():
 
     # Display side pane with text boxes
     with st.sidebar:
-        st.subheader("Sv Text")
-        st.text_area("Sv Text", sv_text, height=400)
+        st.subheader("BR Text")
+        st.text_area("BR Text", br_text, height=400)
 
         st.subheader("Input Text")
         input_text = st.text_area("Input Text", height=200)
 
     # Display matches in main portion
     st.title("Matches in BORI Edition")
-    matches = find_matches(sv_text, input_text)
-    st.write(matches)
+    if br_text and input_text:
+        matches = find_matches(br_text, input_text)
+        if matches:
+            st.write("Matches found:")
+            st.write(matches)
+        else:
+            st.write("No matches found.")
 
 if __name__ == "__main__":
     main()
