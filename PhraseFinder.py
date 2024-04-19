@@ -36,7 +36,7 @@ def main():
     find_matches_button = st.sidebar.button("Find Matches")
 
     # Display matches in main portion
-    st.title("Matches in BORI and KK Editions")
+    st.title("Parallel Phrase Finder - Matches in BORI and KK Editions")
     if find_matches_button and input_text:
         if br_text:
             matched_lines = find_matches(br_text, input_text, 'BR')
