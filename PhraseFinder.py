@@ -10,20 +10,15 @@ def fetch_text(url):
     else:
         return None
 
-# Function to find matches in BORI edition and return sentences with matched words highlighted
+# Function to find matches in BORI edition and return sentences with matched phrases highlighted
 def find_matches(bori_text, input_text):
-    # Split input text into words
-    input_words = re.findall(r'\b\w+\b', input_text)
-
     # Find matches in BORI edition
     sentences = re.split(r'(?<=[.!?])\s+', bori_text)
     matched_sentences = []
     for sentence in sentences:
-        for word in input_words:
-            if re.search(r'\b' + re.escape(word) + r'\b', sentence, re.IGNORECASE):
-                sentence = re.sub(r'\b' + re.escape(word) + r'\b', f'<span style="color:red">{word}</span>', sentence, flags=re.IGNORECASE)
-                matched_sentences.append(sentence)
-                break  # Once a match is found in the sentence, move to the next sentence
+        if re.search(r'\b' + re.escape(input_text) + r'\b', sentence, re.IGNORECASE):
+            sentence = re.sub(r'\b' + re.escape(input_text) + r'\b', f'<span style="color:red">{input_text}</span>', sentence, flags=re.IGNORECASE)
+            matched_sentences.append(sentence)
     return matched_sentences
 
 def main():
