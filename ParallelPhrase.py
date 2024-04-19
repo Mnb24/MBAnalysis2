@@ -29,8 +29,8 @@ def main():
 
     # Display side pane with text boxes
     with st.sidebar:
-        st.subheader("BR Text")
-        st.text_area("BR Text", br_text, height=400)
+        st.subheader("SV Text")
+        st.text_area("SV Text", sv_text, height=400)
 
         st.subheader("Input Text")
         input_text = st.text_area("Input Text", height=200)
@@ -39,10 +39,20 @@ def main():
             if br_text and input_text:
                 matches = find_matches(br_text, input_text)
                 if matches:
-                    st.write("Matches found:")
+                    st.write("Matches found in BORI edition:")
                     st.write(matches)
                 else:
-                    st.write("No matches found.")
+                    st.write("No matches found in BORI edition.")
+
+    # Display matches in main portion
+    st.title("Matches in BORI Edition")
+    if br_text and input_text:
+        matches = find_matches(br_text, input_text)
+        if matches:
+            st.write("Matches found in BORI edition:")
+            st.write(matches)
+        else:
+            st.write("No matches found in BORI edition.")
 
 if __name__ == "__main__":
     main()
