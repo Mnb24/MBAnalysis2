@@ -56,7 +56,7 @@ def main():
             else:
                 st.write("No matches found in KK edition.")
     else:
-        st.write("Please enter input text by referring to (copy from box 1 and paste in box 2) the SV text in the sidepane.")
+        st.write("Please enter text by referring to (copy from box 1 and paste in box 2) the SV text in the sidepane.")
 
 if __name__ == "__main__":
     main()
